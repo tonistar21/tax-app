@@ -219,17 +219,17 @@ export function OrdersList() {
       {(summary || analytics) && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-white/[0.02] border border-white/5 rounded-xl p-5">
-            <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mb-2">Общая выручка</p>
+            <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mb-2">Загальна виручка</p>
             <p className="text-2xl font-mono text-white">${(summary?.revenue_total ?? 0).toFixed(2)}</p>
           </div>
 
           <div className="bg-white/[0.02] border border-white/5 rounded-xl p-5">
-            <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mb-2">Сумма собранного налога</p>
+            <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mb-2">Сума зібраного налогу</p>
             <p className="text-2xl font-mono text-white">${(summary?.tax_total ?? 0).toFixed(2)}</p>
           </div>
 
           <div className="bg-white/[0.02] border border-white/5 rounded-xl p-5">
-            <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mb-2">Топ-3 округа по продажам</p>
+            <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mb-2">Топ-3 округа з продаж</p>
             <div className="mt-2 space-y-2">
               {(analytics?.top_counties ?? []).length === 0 ? (
                 <p className="text-xs text-slate-500">No data</p>
