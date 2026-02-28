@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: tax_app_db
+    environment:
+      POSTGRES_USER: taxapp
+      POSTGRES_PASSWORD: taxapp
+      POSTGRES_DB: taxapp
+    ports:
+      - "5433:5432"
+    volumes:
+      - tax_app_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taxapp -d taxapp"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  server:
+    build:
+      context: ./server
+    container_name: tax_app_server
+    environment:
+      PORT: "4000"
+      DATABASE_URL: "postgresql://taxapp:taxapp@db:5432/taxapp?schema=public"
+      JWT_SECRET: "betterme_super_secret_jwt_key_2026"
+      GEO_COUNTIES_PATH: "/data/geo/ny_counties.geojson"
+      GEO_CITY_EXCEPTIONS_PATH: "/data/geo/ny_city_exceptions.geojson"
+      ST100_TEMPLATE_PATH: "/data/st100.pdf"  
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./data:/data
+
+  client:
+    build:
+      context: ./client
+    container_name: tax_app_client
+    depends_on:
+      - server
+    ports:
+      - "5173:80"
+
+volumes:
+  tax_app_pgdata:

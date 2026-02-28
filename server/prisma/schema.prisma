@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ImportBatch {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  filename  String?
+  totalRows Int      @default(0)
+
+  orders    Order[]
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  // Import metadata (null for manual orders)
+  importBatchId  String?
+  importRowNumber Int?
+
+  importBatch ImportBatch? @relation(fields: [importBatchId], references: [id])
+
+  @@unique([importBatchId, importRowNumber])
+
+  // Input
+  externalId String?
+  latitude   Decimal  @db.Decimal(9, 6)
+  longitude  Decimal  @db.Decimal(9, 6)
+  timestamp  DateTime
+  subtotalCents Int
+
+  // Results
+  compositeTaxRate Decimal @db.Decimal(9, 6)
+  taxCents         Int
+  totalCents       Int
+
+  // Breakdown
+  stateRate  Decimal @db.Decimal(9, 6)
+  countyRate Decimal @db.Decimal(9, 6)
+  cityRate   Decimal @db.Decimal(9, 6)
+  specialRates Json
+
+  // Jurisdictions + debug
+  jurisdictions Json
+  source        String
+}

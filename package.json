@@ -1,0 +1,23 @@
+{
+  "name": "tax-app",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w server",
+    "dev:all": "concurrently -n SERVER,CLIENT \"npm run dev -w server\" \"npm run dev -w client\"",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:reset": "npm run db:up && npm run prisma:migrate -w server",
+    "prisma:generate": "npm run prisma:generate -w server",
+    "prisma:migrate": "npm run prisma:migrate -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  }
+}
