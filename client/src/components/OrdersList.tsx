@@ -45,7 +45,6 @@ export function OrdersList() {
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(20);
 
-  // filters
   const [searchQuery, setSearchQuery] = React.useState("");
   const [source, setSource] = React.useState("");
   const [county, setCounty] = React.useState("");
@@ -92,7 +91,6 @@ export function OrdersList() {
       setData(list);
       setSummary(sum);
 
-      // analytics можно грузить один раз (или по кнопке), чтобы не спамить запросами
       if (!analytics) {
         const a = await getOrdersAnalytics();
         setAnalytics(a);
@@ -106,7 +104,6 @@ export function OrdersList() {
 
   React.useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pageSize]);
 
   function applyFilters() {
@@ -118,7 +115,6 @@ export function OrdersList() {
     try {
       const params: Record<string, string> = {};
 
-      // ВАЖНО: экспорт делаем по ТЕКУЩИМ фильтрам (без page/pageSize)
       if (t(source)) params.source = t(source);
       if (t(county)) params.county = t(county);
       if (t(city)) params.city = t(city);
